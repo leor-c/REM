@@ -1,0 +1,13 @@
+retnet:
+  _target_: models.RetNetConfig
+  tokens_per_block: 65
+  max_blocks: 10
+  num_layers: 5
+  num_heads: 4
+  embed_dim: 256
+  dropout: 0.1
+  blocks_per_chunk: 3
+context_length: 2
+compute_states_parallel: True
+shared_embeddings: True
+shared_prediction_token: False

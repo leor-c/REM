@@ -1,0 +1,6 @@
+name: 'LSAC'
+use_original_obs: False
+lstm_latent_dim: 512
+n_layers: 2
+include_action_inputs: True
+rnn_type: 'lstm'
