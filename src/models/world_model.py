@@ -471,7 +471,7 @@ class POPRetNetWorldModel(RetNetWorldModel):
         else:
             outputs = self(tokens, compute_next_state_latents=True)
 
-        next_token_logits, next_token_labels = self.get_next_token_logits_and_labels2(outputs, tokens, batch['mask_padding'])
+        next_token_logits, next_token_labels = self.get_next_token_logits_and_labels(outputs, tokens, batch['mask_padding'])
 
         rewards_logits, labels_rewards, ends_logits, labels_ends = self.get_rewards_ends_logits_and_labels(
             outputs,
@@ -485,25 +485,8 @@ class POPRetNetWorldModel(RetNetWorldModel):
         loss_ends = F.cross_entropy(ends_logits, labels_ends)
 
         return LossWithIntermediateLosses(loss_obs=loss_obs, loss_rewards=loss_rewards, loss_ends=loss_ends), {}
-    
+
     def get_next_token_logits_and_labels(self, outputs: torch.Tensor, tokens, mask_padding: torch.Tensor):
-        outputs = rearrange(outputs, 'b (t k1) e -> b t k1 e', k1=self.config.tokens_per_block)
-        next_obs_outs = outputs[:, :, :-1]
-        pred_mask = mask_padding.clone()
-        pred_mask[:, :self.context_length] = 0
-        next_obs_outs = self.head_observations(next_obs_outs[torch.where(pred_mask)].flatten(0, -2))
-
-        tokens = rearrange(tokens, 'b (t k1) -> b t k1', k1=self.config.tokens_per_block)[:, :, :-1]
-        labels = tokens[torch.where(pred_mask)].flatten()
-
-        b, t, k1 = tokens.shape
-        sample_indices = torch.arange(outputs.shape[0], device=outputs.device).unsqueeze(1).expand(b, t*k1)
-        sample_indices = rearrange(sample_indices, 'b (t k1) -> b t k1')
-        sample_indices = sample_indices[torch.where(pred_mask)]
-
-        return next_obs_outs, labels, sample_indices
-
-    def get_next_token_logits_and_labels2(self, outputs: torch.Tensor, tokens, mask_padding: torch.Tensor):
         pred_mask = mask_padding.clone()
         pred_mask[:, :self.context_length] = 0
         k1 = self.config.tokens_per_block
