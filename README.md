@@ -1,7 +1,7 @@
 # Improving Token-Based World Models with Parallel Observation Prediction
 Lior Cohen, Kaixin Wang, Bingyi Kang, Shie Mannor
 
-The implementation of our [paper]() "Improving Token-Based World Models with Parallel Observation Prediction".
+The implementation of our [paper](https://arxiv.org/abs/2402.05643) "Improving Token-Based World Models with Parallel Observation Prediction".
 
 This repository started as a fork of [IRIS](https://github.com/eloialonso/iris).
 
