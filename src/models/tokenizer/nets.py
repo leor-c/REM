@@ -463,7 +463,7 @@ class SimpleDecoder(nn.Module):
         self.blocks = nn.ModuleList(
             [
                 nn.Sequential(
-                    Normalize(max(code_dim // (2 ** i), latent_dim)),
+                    Normalize(max(code_dim // (2 ** i), latent_dim), num_groups=config.norm_num_groups),
                     nn.SiLU(),
                     Upsample(
                         max(code_dim // (2 ** i), latent_dim),
