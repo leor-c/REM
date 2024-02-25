@@ -11,7 +11,7 @@ from yet_another_retnet.retnet import RetNetDecoder, RetNetDecoderLayer
 
 from dataset import Batch
 
-from .pop_retnet import RLRetNetDecoderLayer, RLRetNetDecoder
+from .pop_retnet import POPRetNetDecoderLayer, POPRetNetDecoder
 from .tokenizer import Tokenizer
 from utils import LossWithIntermediateLosses
 
@@ -300,13 +300,13 @@ class POPRetNetWorldModel(RetNetWorldModel):
         self.pred_tokens_version = 'shared' if shared_prediction_token else 'per-token'
 
     def _build_model(self):
-        decoder_layer = RLRetNetDecoderLayer(
+        decoder_layer = POPRetNetDecoderLayer(
             self.config.embed_dim,
             self.config.num_heads,
             dropout=self.config.dropout,
             dim_feedforward=4*self.config.embed_dim,
         )
-        return RLRetNetDecoder(decoder_layer, self.config.num_layers)
+        return POPRetNetDecoder(decoder_layer, self.config.num_layers)
 
     def _embed_tokens_shared(self, tokens, tokenizer):
         if tokens.dim() == 2:
@@ -354,7 +354,7 @@ class POPRetNetWorldModel(RetNetWorldModel):
 
         tokens_emb = self._embed_tokens(tokens, tokenizer)
 
-        assert isinstance(self._model, RLRetNetDecoder)
+        assert isinstance(self._model, POPRetNetDecoder)
 
         if compute_next_state_latents:
             if self.compute_states_parallel:
@@ -379,7 +379,7 @@ class POPRetNetWorldModel(RetNetWorldModel):
                     if not self.compute_states_parallel_inference:
                         outs, incremental_state['state'] = self._model.forward_chunkwise(tokens_emb, incremental_state['n'], incremental_state['state'])
                     else:
-                        outs, state_per_frame = self._model.forward_chunkwise_per_block_state(tokens_emb2, incremental_state['n'], tokens_per_block=self.config.tokens_per_block - 1, prev_states=incremental_state['state'])
+                        outs, state_per_frame = self._model.forward_chunkwise_per_block_state(tokens_emb2, incremental_state['n'], tokens_per_block=self.config.tokens_per_block, prev_states=incremental_state['state'])
                         incremental_state['state'] = [s[-2] for s in state_per_frame]
                 incremental_state['n'] += tokens_emb.shape[1]
                 return outs

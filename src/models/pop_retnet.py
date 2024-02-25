@@ -155,7 +155,7 @@ def retention_chunkwise(
     return retention, state
 
 
-class RLMultiScaleRetention(yet_another_retnet.retention.MultiScaleRetention):
+class POPMultiScaleRetention(yet_another_retnet.retention.MultiScaleRetention):
     def forward_chunkwise_per_block_state(
         self,
         query: Tensor,
@@ -296,7 +296,7 @@ class RLMultiScaleRetention(yet_another_retnet.retention.MultiScaleRetention):
         return retention, state
 
 
-class RLRetNetDecoderLayer(yet_another_retnet.retnet.RetNetDecoderLayer):
+class POPRetNetDecoderLayer(yet_another_retnet.retnet.RetNetDecoderLayer):
 
     def __init__(self, d_model: int, nhead: int, dim_feedforward: int = 2048, dropout: float = 0.1,
                  activation: Union[ActivationString, Callable[[Tensor], Tensor]] = "swish", norm_first: bool = True,
@@ -304,7 +304,7 @@ class RLRetNetDecoderLayer(yet_another_retnet.retnet.RetNetDecoderLayer):
                  dtype: Optional[torch.dtype] = None) -> None:
         super().__init__(d_model, nhead, dim_feedforward, dropout, activation, norm_first, layer_norm_eps, device,
                          dtype)
-        self.retention = RLMultiScaleRetention(  # type: ignore
+        self.retention = POPMultiScaleRetention(  # type: ignore
             embed_dim=d_model,
             num_heads=nhead,
             dropout=dropout,
@@ -356,7 +356,7 @@ class RLRetNetDecoderLayer(yet_another_retnet.retnet.RetNetDecoderLayer):
         return x, state
 
 
-class RLRetNetDecoder(yet_another_retnet.retnet.RetNetDecoder):
+class POPRetNetDecoder(yet_another_retnet.retnet.RetNetDecoder):
 
     def forward_chunkwise_per_block_state(
             self, x: Tensor, start_idx: int, tokens_per_block: int, prev_states: Sequence[Optional[Tensor]] = ()
@@ -370,7 +370,7 @@ class RLRetNetDecoder(yet_another_retnet.retnet.RetNetDecoder):
 
         states: List[Tensor] = []
         for layer, prev_state in zip(self.layers, prev_states):
-            assert isinstance(layer, RLRetNetDecoderLayer)
+            assert isinstance(layer, POPRetNetDecoderLayer)
             x, state = layer.forward_chunkwise_per_block_state(x, start_idx, tokens_per_block, prev_state)
             states.append(state)
         return x, states
@@ -387,7 +387,7 @@ class RLRetNetDecoder(yet_another_retnet.retnet.RetNetDecoder):
 
         states: List[Tensor] = []
         for layer, prev_state_pf in zip(self.layers, per_block_states):
-            assert isinstance(layer, RLRetNetDecoderLayer)
+            assert isinstance(layer, POPRetNetDecoderLayer)
             x, state = layer.forward_chunkwise_from_per_block_states(x, start_idx, tokens_per_block, prev_state_pf, compute_state=compute_state)
             states.append(state)
         return x, states
