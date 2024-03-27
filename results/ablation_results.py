@@ -90,7 +90,7 @@ def main(plot_aggregates: bool = True, plot_performance_profiles: bool = True,
     RANDOM_SCORES = {k: v[0] for k, v in raw_scores_random.items()}
     HUMAN_SCORES = {k: v[0] for k, v in raw_scores_human.items()}
 
-    score_dict_rwm, score_rwm, _ = load_json_scores('RWM', random_scores=RANDOM_SCORES, human_scores=HUMAN_SCORES, subset=ABLATION_SUBSET)
+    score_dict_rem, score_rem, _ = load_json_scores('REM', random_scores=RANDOM_SCORES, human_scores=HUMAN_SCORES, subset=ABLATION_SUBSET)
 
     score_dict_sep_wm_emb, score_sep_wm_emb, _ = load_json_scores(
         'ablation-separate-wm-embeddings',
@@ -131,7 +131,7 @@ def main(plot_aggregates: bool = True, plot_performance_profiles: bool = True,
 
 
     score_data_dict_games = {
-        f'{OUR_ALG_NAME}': score_dict_rwm,
+        f'{OUR_ALG_NAME}': score_dict_rem,
         AblationType.NoPOP.value: score_dict_no_pop,
         AblationType.WMEmb.value: score_dict_sep_wm_emb,
         AblationType.Tok4x4.value: score_dict_4x4,
@@ -140,7 +140,7 @@ def main(plot_aggregates: bool = True, plot_performance_profiles: bool = True,
     }
 
     all_score_dict = {
-        f'{OUR_ALG_NAME}': score_rwm,
+        f'{OUR_ALG_NAME}': score_rem,
         AblationType.NoPOP.value: score_no_pop,
         AblationType.WMEmb.value: score_sep_wm_emb,
         AblationType.Tok4x4.value: score_4x4,

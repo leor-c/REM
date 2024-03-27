@@ -106,9 +106,9 @@ def plot_atari_scores_results(plot_aggregates: bool = True, plot_introduction_iq
     score_data_dict_games = {
         # 'EfficientZero': score_dict_efficientzero,
         'SimPLe': score_dict_simple,
+        'DreamerV3': score_dict_dreamerv3,
         'TWM': score_dict_twm,
         'STORM': score_dict_storm,
-        'DreamerV3': score_dict_dreamerv3,
         'IRIS': score_dict_iris,
         f'{OUR_ALG_NAME} (ours)': score_dict_rwm,
     }
@@ -116,9 +116,9 @@ def plot_atari_scores_results(plot_aggregates: bool = True, plot_introduction_iq
     all_score_dict = {
         # 'EfficientZero': score_efficientzero,
         'SimPLe': score_simple,
+        'DreamerV3': score_dreamerv3,
         'TWM': score_twm,
         'STORM': score_storm,
-        'DreamerV3': score_dreamerv3,
         'IRIS': score_iris,
         f'{OUR_ALG_NAME} (ours)': score_rwm,
     }
@@ -351,7 +351,7 @@ def main():
         plot_introduction_iqm=True,
         plot_performance_profiles=False,
         plot_probability_of_improvement=False,
-        plot_latex_table=False
+        plot_latex_table=True
     )
     # plot_run_times_results(short=True, orig_iris=True)
 
