@@ -4,7 +4,7 @@ Lior Cohen, Kaixin Wang, Bingyi Kang, Shie Mannor
 Paper: [Improving Token-Based World Models with Parallel Observation Prediction](https://arxiv.org/abs/2402.05643).
 
 
-<b> Check out [M<sup>3</sup>](https://github.com/leor-c/M3), our latest world model algorithm that builds on REM. </b>
+<b> Check out [Simulus](https://github.com/leor-c/Simulus), our improved world model algorithm that builds on REM. </b>
 
 
 If you find this code useful, please cite in your paper
